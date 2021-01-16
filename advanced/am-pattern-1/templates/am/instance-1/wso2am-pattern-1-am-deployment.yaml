@@ -51,9 +51,11 @@ spec:
             - name: mysql-connector-jar
               mountPath: /mysql-connector-jar
         {{ end }}
+        {{ if .Values.wso2.deployment.analytics.enabled }}
         - name: init-am-analytics-worker
           image: busybox:1.32
           command: ['sh', '-c', 'echo -e "Checking for the availability of WSO2 API Manager Analytics Worker deployment"; while ! nc -z {{ template "am-pattern-1.resource.prefix" . }}-am-analytics-worker-service 7712; do sleep 1; printf "-"; done; echo -e "  >> WSO2 API Manager Analytics Worker has started";']
+        {{ end }}
       containers:
         - name: wso2am
 {{- include "image" (dict "Values" .Values "deployment" .Values.wso2.deployment.am) | indent 10 }}
